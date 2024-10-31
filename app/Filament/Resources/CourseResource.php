@@ -19,7 +19,7 @@ class CourseResource extends Resource
 {
     protected static ?string $model = Course::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
     public static function form(Form $form): Form
     {
@@ -28,13 +28,13 @@ class CourseResource extends Resource
                 TextInput::make('title')
                     ->required()
                     ->maxLength(255),
-               TextInput::make('code')
+                TextInput::make('code')
                     ->required()
                     ->maxLength(255),
-                    TextInput::make('unit')
+                TextInput::make('unit')
                     ->numeric()
                     ->required()
-                    
+
             ]);
     }
 
@@ -46,7 +46,7 @@ class CourseResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('code')
                     ->searchable(),
-                    TextColumn::make('unit')
+                TextColumn::make('unit')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -77,6 +77,19 @@ class CourseResource extends Resource
             //
         ];
     }
+
+    public static function getNavigationBadge(): ?string
+
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+
+    {
+        return 'success';
+    }
+
 
     public static function getPages(): array
     {

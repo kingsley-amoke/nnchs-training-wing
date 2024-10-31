@@ -23,128 +23,123 @@ class AssessmentResource extends Resource
 {
     protected static ?string $model = Assessment::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-scale';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Section::make('Student Information')
-                ->schema([
-                    Select::make('student_id')
-                    ->label(label:'Student')
-                    ->relationship(name:'student', titleAttribute:'last_name')
-                    ->getOptionLabelFromRecordUsing(fn (Model $student) => "{$student->last_name} {$student->first_name}")
-                    ->required()
-                    ->preload()
-                    ->native(false),
-                   
-                Select::make('course_id')
-                ->label(label:'Course')
-                ->relationship(name:'course', titleAttribute:'title')
-                    ->required()
-                    ->preload()
-                    ->native(false),
-                   
-                ])->columns(2),
-                Section::make('Scores')
-                ->schema([
-                     
-              TextInput::make('first')
-              ->label(label:'CA 1')
-                ->numeric()
-                ->afterStateUpdated(fn($state, Set $set, Get $get) => $set('total', ($get('exam') ?: 0) + ($get('second') ?: 0) + ($get('third') ?: 0) + ($state ?: 0) ))
-                ->afterStateUpdated(function(Set $set, Get $get){
-                   if($get('total') < 50){
-                        $set('grade', 'F');
-                   }else if($get('total') < 60){
-                    $set('grade', 'C');
-                   }else if($get('total') < 65){
-                    $set('grade', 'B');
-                   }else{
-                    $set('grade', 'A');
-                   }
+                    ->schema([
+                        Select::make('student_id')
+                            ->label(label: 'Student')
+                            ->relationship(name: 'student', titleAttribute: 'last_name')
+                            ->getOptionLabelFromRecordUsing(fn(Model $student) => "{$student->last_name} {$student->first_name}")
+                            ->required()
+                            ->preload()
+                            ->native(false),
 
-                } )
-                ->reactive()
-                ->default(0)
-                ->minValue(0)
-                ->maxValue(10),
-                
-           TextInput::make('second')
-           ->label(label:'CA 2')
-                ->numeric()
-                ->default(0)
-                ->afterStateUpdated(fn($state, Set $set, Get $get) => $set('total', ($get('exam') ?: 0) + ($get('first') ?: 0) + ($get('third') ?: 0) + ($state ?: 0) ))
-                ->afterStateUpdated(function(Set $set, Get $get){
-                    if($get('total') < 50){
-                         $set('grade', 'F');
-                    }else if($get('total') < 60){
-                     $set('grade', 'C');
-                    }else if($get('total') < 65){
-                     $set('grade', 'B');
-                    }else{
-                     $set('grade', 'A');
-                    }
- 
-                 } )
-                ->reactive()
-                ->maxValue(10)
-                ->minValue(0),
-            TextInput::make('third')
-            ->label(label:'CA 3')
-                ->numeric()
-                ->default(0)
-                ->afterStateUpdated(fn($state, Set $set, Get $get) => $set('total', ($get('exam') ?: 0) + ($get('second') ?: 0) + ($get('first') ?: 0) + ($state ?: 0) ))
-                ->afterStateUpdated(function(Set $set, Get $get){
-                    if($get('total') < 50){
-                         $set('grade', 'F');
-                    }else if($get('total') < 60){
-                     $set('grade', 'C');
-                    }else if($get('total') < 65){
-                     $set('grade', 'B');
-                    }else{
-                     $set('grade', 'A');
-                    }
- 
-                 } )
-                ->reactive()
-                ->maxValue(10)
-                ->minValue(0),
-            TextInput::make('exam')
-                ->numeric()
-                ->default(0)
-                ->afterStateUpdated(fn($state, Set $set, Get $get) => $set('total', ($get('second') ?: 0) + ($get('second') ?: 0) + ($get('third') ?: 0) + ($state ?: 0) ))
-                ->afterStateUpdated(function(Set $set, Get $get){
-                    if($get('total') < 50){
-                         $set('grade', 'F');
-                    }else if($get('total') < 60){
-                     $set('grade', 'C');
-                    }else if($get('total') < 65){
-                     $set('grade', 'B');
-                    }else{
-                     $set('grade', 'A');
-                    }
- 
-                 } )
-                ->reactive()
-                ->maxValue(70)
-                ->minValue(0),
-          TextInput::make('total')
-                ->numeric()
-                ->default(0)
-                ->dehydrated()
-                ->reactive()
-                ->maxValue(100)
-                ->minValue(0)
-                ->extraInputAttributes(['readonly'=>true]),
-            TextInput::make('grade')
-                ->maxLength(255)
-                ->extraInputAttributes(['readonly'=>true])
-                ,
-                ])
-                ->columns(6),
-              
+                        Select::make('course_id')
+                            ->label(label: 'Course')
+                            ->relationship(name: 'course', titleAttribute: 'title')
+                            ->required()
+                            ->preload()
+                            ->native(false),
+
+                    ])->columns(2),
+                Section::make('Scores')
+                    ->schema([
+
+                        TextInput::make('first')
+                            ->label(label: 'CA 1')
+                            ->numeric()
+                            ->afterStateUpdated(fn($state, Set $set, Get $get) => $set('total', ($get('exam') ?: 0) + ($get('second') ?: 0) + ($get('third') ?: 0) + ($state ?: 0)))
+                            ->afterStateUpdated(function (Set $set, Get $get) {
+                                if ($get('total') < 50) {
+                                    $set('grade', 'F');
+                                } else if ($get('total') < 60) {
+                                    $set('grade', 'C');
+                                } else if ($get('total') < 65) {
+                                    $set('grade', 'B');
+                                } else {
+                                    $set('grade', 'A');
+                                }
+                            })
+                            ->reactive()
+                            ->default(0)
+                            ->minValue(0)
+                            ->maxValue(10),
+
+                        TextInput::make('second')
+                            ->label(label: 'CA 2')
+                            ->numeric()
+                            ->default(0)
+                            ->afterStateUpdated(fn($state, Set $set, Get $get) => $set('total', ($get('exam') ?: 0) + ($get('first') ?: 0) + ($get('third') ?: 0) + ($state ?: 0)))
+                            ->afterStateUpdated(function (Set $set, Get $get) {
+                                if ($get('total') < 50) {
+                                    $set('grade', 'F');
+                                } else if ($get('total') < 60) {
+                                    $set('grade', 'C');
+                                } else if ($get('total') < 65) {
+                                    $set('grade', 'B');
+                                } else {
+                                    $set('grade', 'A');
+                                }
+                            })
+                            ->reactive()
+                            ->maxValue(10)
+                            ->minValue(0),
+                        TextInput::make('third')
+                            ->label(label: 'CA 3')
+                            ->numeric()
+                            ->default(0)
+                            ->afterStateUpdated(fn($state, Set $set, Get $get) => $set('total', ($get('exam') ?: 0) + ($get('second') ?: 0) + ($get('first') ?: 0) + ($state ?: 0)))
+                            ->afterStateUpdated(function (Set $set, Get $get) {
+                                if ($get('total') < 50) {
+                                    $set('grade', 'F');
+                                } else if ($get('total') < 60) {
+                                    $set('grade', 'C');
+                                } else if ($get('total') < 65) {
+                                    $set('grade', 'B');
+                                } else {
+                                    $set('grade', 'A');
+                                }
+                            })
+                            ->reactive()
+                            ->maxValue(10)
+                            ->minValue(0),
+                        TextInput::make('exam')
+                            ->numeric()
+                            ->default(0)
+                            ->afterStateUpdated(fn($state, Set $set, Get $get) => $set('total', ($get('second') ?: 0) + ($get('second') ?: 0) + ($get('third') ?: 0) + ($state ?: 0)))
+                            ->afterStateUpdated(function (Set $set, Get $get) {
+                                if ($get('total') < 50) {
+                                    $set('grade', 'F');
+                                } else if ($get('total') < 60) {
+                                    $set('grade', 'C');
+                                } else if ($get('total') < 65) {
+                                    $set('grade', 'B');
+                                } else {
+                                    $set('grade', 'A');
+                                }
+                            })
+                            ->reactive()
+                            ->maxValue(70)
+                            ->minValue(0),
+                        TextInput::make('total')
+                            ->numeric()
+                            ->default(0)
+                            ->dehydrated()
+                            ->reactive()
+                            ->maxValue(100)
+                            ->minValue(0)
+                            ->extraInputAttributes(['readonly' => true]),
+                        TextInput::make('grade')
+                            ->maxLength(255)
+                            ->extraInputAttributes(['readonly' => true]),
+                    ])
+                    ->columns(6),
+
             ]);
     }
 
@@ -153,23 +148,23 @@ class AssessmentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('student.service_number')
-                ->label(label:'Student')
-                ->searchable()
+                    ->label(label: 'Student')
+                    ->searchable()
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('course.code')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('first')
-                ->label(label:'CA 1')
+                    ->label(label: 'CA 1')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('second')
-                ->label(label:'CA 2')
+                    ->label(label: 'CA 2')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('third')
-                ->label(label:'CA 3')
+                    ->label(label: 'CA 3')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('exam')

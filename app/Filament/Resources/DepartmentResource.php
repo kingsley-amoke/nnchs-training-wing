@@ -17,7 +17,7 @@ class DepartmentResource extends Resource
 {
     protected static ?string $model = Department::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
     public static function form(Form $form): Form
     {
@@ -60,11 +60,24 @@ class DepartmentResource extends Resource
     }
 
     public static function getRelations(): array
-{
-    return [
-        RelationManagers\LevelsRelationManager::class,
-    ];
-}
+    {
+        return [
+            RelationManagers\LevelsRelationManager::class,
+        ];
+    }
+
+    public static function getNavigationBadge(): ?string
+
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+
+    {
+        return 'success';
+    }
+
 
     public static function getPages(): array
     {

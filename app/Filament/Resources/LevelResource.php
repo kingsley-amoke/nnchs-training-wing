@@ -17,20 +17,20 @@ class LevelResource extends Resource
 {
     protected static ?string $model = Level::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('department_id')
-                    ->relationship(name: 'department', titleAttribute:'name')
+                    ->relationship(name: 'department', titleAttribute: 'name')
                     ->required()
                     ->native(false),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                
+
             ]);
     }
 
@@ -43,7 +43,7 @@ class LevelResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
